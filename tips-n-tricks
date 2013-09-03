@@ -1,0 +1,68 @@
+UNIX tips -
+
+1) grep a pattern in live scrolling log and then exit if found - 
+touch xxx
+tail -f xxx | grep -q 'Stop'
+ps -ef |grep 'grep -q'
+# the grep process is there
+echo "Stop" >> xxx
+ps -ef|grep 'grep -q'
+# the grep process actually DID exit
+printf "\n" >> xxx
+# the tail process exits, probably because it receives a signal when it 
+# tries to write to a closed pipe
+
+# tail -f logfile | grep -q 'Message to continue'
+
+Shell script - 
+tail -f logfile | while read line; do
+  echo $line | grep -q 'find me to quit' && break;
+done
+
+2) return code of the piped processes from a single command chain
+${PIPESTATUS[0]} ${PIPESTATUS[1]} 
+
+3) find a pattern in a live log; timeout if not found within the given WAIT period:
+wait_tomcat_start(){
+WAIT=60
+echo "Waiting for Tomcat to initialize for $WAIT seconds"
+
+# Tail log file, do a while read loop with a timeout that checks for desired log status,
+# if found kill the find and break the loop. If not found within timeout: the read -t will
+# kill the while read loop and bounce to the OR statement that will in turn kill the tail 
+# and echo some message to the console.
+tail -n0 -f $SERVERLOG | while read -t $WAIT LINE || (pkill -f "tail -n0 -f" && echo "Tomcat did not start in a timely fashion! Please check status of tomcat!!!")
+do
+        echo "$LINE"
+        [[ "${LINE}" == *"Server startup in"* ]] && pkill -f "tail -n0 -f" && break
+done
+}
+
+
+WINDOWS tips -
+
+1) Powershell cmd line:
+Recursively remove .svn from folders
+	gci -fil '.svn' -r -force | ri -r -force
+Here is the rest of my source tree cleanup script.
+
+gci -fil 'bin' -r -force | ri -r -force
+gci -fil 'obj' -r -force | ri -r -force
+gci -fil '_ReSharper*' -r -force | ri -r -force
+gci -fil '*.suo' -r -force | ri -r -force
+gci -fil '*.user' -r -force | ri -r -force
+=======================================================
+FOR /F "tokens=*" %G IN ('DIR /B /AD /S *.svn*') DO RMDIR /S /Q "%G"
+
+BAT file:
+for /f "tokens=* delims=" %%i in ('dir /s /b /a:d *.svn') do (
+rd /s /q "%%i"
+)
+
+
+SVN tips -
+
+1) Checkout only 1 file in svn -
+svn checkout <url_of_big_dir> <target> --depth empty
+cd <target>
+svn up <file_you_want>
