@@ -1,0 +1,5 @@
+REST API call to trigger a non-parameterized Jenkins job (using curl)
+curl -i -u<USER> -FSubmit=Build 'http-url/build'
+
+REST API call to trigger a parameterized Jenkins job (using curl)
+curl -u"userID:API-key" 'http-url/buildWithParameters?param=value'
