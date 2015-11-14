@@ -12,6 +12,9 @@ cid=$(docker run -itd jenkinsci/workflow-demo:latest)
 docker exec $cid ip a
 
 docker exec -it $cid
+## ssh into a docker container
+docker exec -it <mycontainer> bash
+docker exec -it <mycontainer> sh
 
 ##Docker push to repo
 
