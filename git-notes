@@ -1,0 +1,12 @@
+https://training.github.com/kit/downloads/github-git-cheat-sheet.pdf
+
+## git check branch
+git branch
+
+## git create new branch
+git branch newbranch
+
+git checkout newbranch
+
+##print git config
+git config -l
