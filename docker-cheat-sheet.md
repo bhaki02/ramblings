@@ -52,3 +52,10 @@ docker rm $(docker ps -a -q)
 
 ## Delete all images
 docker rmi $(docker images -q)
+
+##nsenter
+docker ps
+#Identify the ID of the container that you want to get into; and retrieve its associated PID:
+PID=$(docker inspect --format {{.State.Pid}} 08a2a025e05f)
+#Enter the container:
+sudo nsenter --target $PID --mount --uts --ipc --net --pid
