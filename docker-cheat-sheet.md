@@ -33,6 +33,7 @@ docker run -i  b5dc1ea7aee3/bin/bash -c 'cat > /tmp/repo/jenkins.groovy' < jenki
 docker exec -i $cid bash -c 'cat > /path/to/container/file' < /path/to/host/file/
 
 docker cp $(docker ps -alq):/path/to/file .
+docker cp <containerId>:/file/path/within/container /host/path/target
 
 ## Docker Commit changes to a container
 
