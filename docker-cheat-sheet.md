@@ -61,5 +61,5 @@ PID=$(docker inspect --format {{.State.Pid}} 08a2a025e05f)
 #Enter the container:
 sudo nsenter --target $PID --mount --uts --ipc --net --pid
 
-Remove dangling/unused volumes:
+##Remove dangling/unused volumes:
 docker volume rm $(docker volume ls -f dangling=true | awk '{print $2}')
